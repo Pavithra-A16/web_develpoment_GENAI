@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Employee Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #8dc8f3;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 30px;
+    }
+
+    form {
+      max-width: 600px;
+      margin: 0 auto 30px;
+      padding: 20px;
+      background: #e3f4fadd;
+      border-radius: 10px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 10px;
+    }
+
+    input, button {
+      padding: 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+    }
+
+    button {
+      background-color: #6caff7;
+      color: white;
+      cursor: pointer;
+      grid-column: span 2;
+    }
+
+    button:hover {
+      background-color: #0759b1;
+    }
+
+    table {
+      width: 90%;
+      margin: 0 auto;
+      border-collapse: collapse;
+      background-color: white;
+    }
+
+    th, td {
+      padding: 12px;
+      text-align: center;
+      border-bottom: 1px solid #ddd;
+    }
+
+    th {
+      background-color: #007bff;
+      color: white;
+    }
+
+    .delete-btn {
+      background-color: #f69ba4;
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .delete-btn:hover {
+      background-color: #e01c2f;
+    }
+  </style>
+</head>
+<body>
+  <marquee 
+  behavior="scroll" 
+  scrollamount="6" 
+  bgcolor ="black"
+  font-family: sans-serif;
+>
+<font color="White">"Empowering teams starts with the right data"</font>
+
+</marquee>
+
+
+  <h1>Employee  Details</h1>
+
+  <form id="employeeForm">
+    <input id="name" placeholder="Name" required />
+    <input id="department" placeholder="Department" required />
+    <input id="salary" type="number" placeholder="Salary" required />
+    <input id="joiningDate" type="date" required />
+    <input id="dob" type="date" required />
+    <button type="submit">Add Employee</button>
+  </form>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Department</th>
+        <th>Salary</th>
+        <th>Join Date</th>
+        <th>DOB</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody id="employeeTable"></tbody>
+  </table>
+
+  <script>
+    const API = 'http://localhost:5000/employees';
+
+    async function loadEmployees() {
+      const res = await axios.get(API);
+      const rows = res.data.map(emp => `
+        <tr>
+          <td>${emp.name}</td>
+          <td>${emp.department}</td>
+          <td>${emp.salary}</td>
+          <td>${emp.joiningDate?.slice(0, 10)}</td>
+          <td>${emp.dateOfBirth?.slice(0, 10)}</td>
+          <td>
+            <button class="delete-btn" onclick="deleteEmployee('${emp._id}')">Delete</button>
+          </td>
+        </tr>
+      `);
+      document.getElementById('employeeTable').innerHTML = rows.join('');
+    }
+
+    async function deleteEmployee(id) {
+      await axios.delete(`${API}/${id}`);
+      loadEmployees();
+    }
+
+    document.getElementById('employeeForm').onsubmit = async function (e) {
+      e.preventDefault();
+      const emp = {
+        name: document.getElementById('name').value,
+        department: document.getElementById('department').value,
+        salary: document.getElementById('salary').value,
+        joiningDate: document.getElementById('joiningDate').value,
+        dateOfBirth: document.getElementById('dob').value
+      };
+      await axios.post(API, emp);
+      loadEmployees();
+      this.reset();
+    };
+
+    loadEmployees();
+  </script>
+  <br><br> <br><br><br><br> <br><br><br><br><br> <br><br>
+  <br><br><br><br><br>
+    <marquee 
+    behavior="scroll" 
+    scrollamount="6" 
+    bgcolor ="black"
+    font-family: sans-serif;
+  >
+  <font color="White">" Every detail matters — manage your workforce with clarity "</font>
+  
+  </marquee>
+  
+</body>
+</html>
