@@ -77,6 +77,18 @@
     .delete-btn:hover {
       background-color: #e01c2f;
     }
+    .update-btn {
+      background-color: #87cefa;
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-left: 6px;
+    }
+    .update-btn:hover {
+      background-color: #4682b4;
+    }
   </style>
 </head>
 <body>
@@ -89,7 +101,6 @@
 <font color="White">"Empowering teams starts with the right data"</font>
 
 </marquee>
-
 
   <h1>Employee  Details</h1>
 
@@ -130,6 +141,7 @@
           <td>${emp.dateOfBirth?.slice(0, 10)}</td>
           <td>
             <button class="delete-btn" onclick="deleteEmployee('${emp._id}')">Delete</button>
+            <button class="update-btn" onclick="populateForm('${emp._id}')">Update</button>
           </td>
         </tr>
       `);
